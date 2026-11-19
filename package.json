@@ -1,0 +1,533 @@
+{
+  "name": "session-sweeper",
+  "displayName": "Session Sweeper for Claude Code & Codex",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "YW",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "claude",
+    "claude code",
+    "codex",
+    "session",
+    "conversation",
+    "history",
+    "delete",
+    "cleanup",
+    "privacy"
+  ],
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1f2430",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HeLanGouSheng/session-sweeper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HeLanGouSheng/session-sweeper/issues"
+  },
+  "homepage": "https://github.com/HeLanGouSheng/session-sweeper#readme",
+  "main": "./dist/extension.js",
+  "l10n": "./l10n",
+  "activationEvents": [],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sessionSweeper",
+          "title": "%container.title%",
+          "icon": "media/activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "sessionSweeper": [
+        {
+          "id": "sessionSweeper.sessions",
+          "name": "%view.name%",
+          "icon": "media/activitybar.svg",
+          "contextualTitle": "%container.title%"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "sessionSweeper.sessions",
+        "contents": "%welcome.none%",
+        "when": "sessionSweeper.state == 'none'"
+      },
+      {
+        "view": "sessionSweeper.sessions",
+        "contents": "%welcome.noMatch%",
+        "when": "sessionSweeper.state == 'noMatch'"
+      }
+    ],
+    "commands": [
+      {
+        "command": "sessionSweeper.refresh",
+        "title": "%cmd.refresh%",
+        "category": "Session Sweeper",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sessionSweeper.search",
+        "title": "%cmd.search%",
+        "category": "Session Sweeper",
+        "icon": "$(search)"
+      },
+      {
+        "command": "sessionSweeper.clearSearch",
+        "title": "%cmd.clearSearch%",
+        "category": "Session Sweeper",
+        "icon": "$(clear-all)",
+        "enablement": "sessionSweeper.filterActive"
+      },
+      {
+        "command": "sessionSweeper.delete",
+        "title": "%cmd.delete%",
+        "category": "Session Sweeper",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sessionSweeper.deletePermanently",
+        "title": "%cmd.deletePermanently%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.preview",
+        "title": "%cmd.preview%",
+        "category": "Session Sweeper",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "sessionSweeper.revealTranscript",
+        "title": "%cmd.revealTranscript%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.copyId",
+        "title": "%cmd.copyId%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.explainBusy",
+        "title": "%cmd.explainBusy%",
+        "category": "Session Sweeper",
+        "icon": "$(question)"
+      },
+      {
+        "command": "sessionSweeper.cleanLeftovers",
+        "title": "%cmd.cleanLeftovers%",
+        "category": "Session Sweeper",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "sessionSweeper.groupByFolder",
+        "title": "%cmd.groupByFolder%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.groupByFolder.active",
+        "title": "%cmd.groupByFolder.active%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.groupByNone",
+        "title": "%cmd.groupByNone%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.groupByNone.active",
+        "title": "%cmd.groupByNone.active%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortByModified",
+        "title": "%cmd.sortByModified%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortByModified.active",
+        "title": "%cmd.sortByModified.active%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortBySize",
+        "title": "%cmd.sortBySize%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortBySize.active",
+        "title": "%cmd.sortBySize.active%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortByTitle",
+        "title": "%cmd.sortByTitle%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.sortByTitle.active",
+        "title": "%cmd.sortByTitle.active%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.openSettings",
+        "title": "%cmd.openSettings%",
+        "category": "Session Sweeper"
+      },
+      {
+        "command": "sessionSweeper.showLog",
+        "title": "%cmd.showLog%",
+        "category": "Session Sweeper"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "sessionSweeper.groupMenu",
+        "label": "%menu.groupBy%"
+      },
+      {
+        "id": "sessionSweeper.sortMenu",
+        "label": "%menu.sortBy%"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "sessionSweeper.search",
+          "when": "view == sessionSweeper.sessions",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sessionSweeper.clearSearch",
+          "when": "view == sessionSweeper.sessions && sessionSweeper.filterActive",
+          "group": "navigation@2"
+        },
+        {
+          "command": "sessionSweeper.refresh",
+          "when": "view == sessionSweeper.sessions",
+          "group": "navigation@3"
+        },
+        {
+          "submenu": "sessionSweeper.groupMenu",
+          "when": "view == sessionSweeper.sessions",
+          "group": "1_view@1"
+        },
+        {
+          "submenu": "sessionSweeper.sortMenu",
+          "when": "view == sessionSweeper.sessions",
+          "group": "1_view@2"
+        },
+        {
+          "command": "sessionSweeper.cleanLeftovers",
+          "when": "view == sessionSweeper.sessions",
+          "group": "2_actions@1"
+        },
+        {
+          "command": "sessionSweeper.showLog",
+          "when": "view == sessionSweeper.sessions",
+          "group": "3_misc@1"
+        },
+        {
+          "command": "sessionSweeper.openSettings",
+          "when": "view == sessionSweeper.sessions",
+          "group": "3_misc@2"
+        }
+      ],
+      "sessionSweeper.groupMenu": [
+        {
+          "command": "sessionSweeper.groupByFolder",
+          "when": "sessionSweeper.groupBy != 'folder'",
+          "group": "1@1"
+        },
+        {
+          "command": "sessionSweeper.groupByFolder.active",
+          "when": "sessionSweeper.groupBy == 'folder'",
+          "group": "1@1"
+        },
+        {
+          "command": "sessionSweeper.groupByNone",
+          "when": "sessionSweeper.groupBy != 'none'",
+          "group": "1@2"
+        },
+        {
+          "command": "sessionSweeper.groupByNone.active",
+          "when": "sessionSweeper.groupBy == 'none'",
+          "group": "1@2"
+        }
+      ],
+      "sessionSweeper.sortMenu": [
+        {
+          "command": "sessionSweeper.sortByModified",
+          "when": "sessionSweeper.sortBy != 'modified'",
+          "group": "1@1"
+        },
+        {
+          "command": "sessionSweeper.sortByModified.active",
+          "when": "sessionSweeper.sortBy == 'modified'",
+          "group": "1@1"
+        },
+        {
+          "command": "sessionSweeper.sortBySize",
+          "when": "sessionSweeper.sortBy != 'size'",
+          "group": "1@2"
+        },
+        {
+          "command": "sessionSweeper.sortBySize.active",
+          "when": "sessionSweeper.sortBy == 'size'",
+          "group": "1@2"
+        },
+        {
+          "command": "sessionSweeper.sortByTitle",
+          "when": "sessionSweeper.sortBy != 'title'",
+          "group": "1@3"
+        },
+        {
+          "command": "sessionSweeper.sortByTitle.active",
+          "when": "sessionSweeper.sortBy == 'title'",
+          "group": "1@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sessionSweeper.preview",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\./",
+          "group": "inline@1"
+        },
+        {
+          "command": "sessionSweeper.delete",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\..*\\.idle$/",
+          "group": "inline@2"
+        },
+        {
+          "command": "sessionSweeper.explainBusy",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\..*\\.busy$/",
+          "group": "inline@2"
+        },
+        {
+          "command": "sessionSweeper.cleanLeftovers",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^leftover/",
+          "group": "inline@1"
+        },
+        {
+          "command": "sessionSweeper.preview",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\./",
+          "group": "1_open@1"
+        },
+        {
+          "command": "sessionSweeper.revealTranscript",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\./",
+          "group": "1_open@2"
+        },
+        {
+          "command": "sessionSweeper.copyId",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\./",
+          "group": "1_open@3"
+        },
+        {
+          "command": "sessionSweeper.delete",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\..*\\.idle$/",
+          "group": "2_delete@1"
+        },
+        {
+          "command": "sessionSweeper.deletePermanently",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\.claude\\.idle$/",
+          "group": "2_delete@2"
+        },
+        {
+          "command": "sessionSweeper.explainBusy",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^session\\..*\\.busy$/",
+          "group": "2_delete@1"
+        },
+        {
+          "command": "sessionSweeper.cleanLeftovers",
+          "when": "view == sessionSweeper.sessions && viewItem =~ /^leftover/",
+          "group": "2_delete@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "sessionSweeper.preview",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.deletePermanently",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.revealTranscript",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.copyId",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.explainBusy",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.groupByFolder",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.groupByNone",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortByModified",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortBySize",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortByTitle",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.groupByFolder.active",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.groupByNone.active",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortByModified.active",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortBySize.active",
+          "when": "false"
+        },
+        {
+          "command": "sessionSweeper.sortByTitle.active",
+          "when": "false"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "sessionSweeper.delete",
+        "key": "delete",
+        "mac": "cmd+backspace",
+        "when": "focusedView == sessionSweeper.sessions"
+      }
+    ],
+    "configuration": {
+      "title": "Session Sweeper",
+      "properties": {
+        "sessionSweeper.deleteMode": {
+          "type": "string",
+          "enum": [
+            "trash",
+            "permanent"
+          ],
+          "enumDescriptions": [
+            "%config.deleteMode.trash%",
+            "%config.deleteMode.permanent%"
+          ],
+          "default": "trash",
+          "scope": "machine",
+          "markdownDescription": "%config.deleteMode%"
+        },
+        "sessionSweeper.groupBy": {
+          "type": "string",
+          "enum": [
+            "folder",
+            "none"
+          ],
+          "enumDescriptions": [
+            "%config.groupBy.folder%",
+            "%config.groupBy.none%"
+          ],
+          "default": "folder",
+          "scope": "machine",
+          "description": "%config.groupBy%"
+        },
+        "sessionSweeper.sortBy": {
+          "type": "string",
+          "enum": [
+            "modified",
+            "size",
+            "title"
+          ],
+          "enumDescriptions": [
+            "%config.sortBy.modified%",
+            "%config.sortBy.size%",
+            "%config.sortBy.title%"
+          ],
+          "default": "modified",
+          "scope": "machine",
+          "description": "%config.sortBy%"
+        },
+        "sessionSweeper.claude.dataDir": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "markdownDescription": "%config.claude.dataDir%"
+        },
+        "sessionSweeper.codex.dataDir": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "markdownDescription": "%config.codex.dataDir%"
+        },
+        "sessionSweeper.codex.executablePath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "markdownDescription": "%config.codex.executablePath%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "lint": "eslint src test",
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "test": "vitest run",
+    "test:integration": "node esbuild.mjs && tsc -p tsconfig.integration.json && vscode-test",
+    "test:ui": "node esbuild.mjs && node scripts/ui-check.mjs",
+    "screenshot": "node esbuild.mjs && node scripts/screenshot.mjs",
+    "icon": "node scripts/render-icon.mjs",
+    "l10n:check": "node scripts/check-l10n.mjs",
+    "verify": "npm run check && npm run lint && npm run test && npm run l10n:check",
+    "vscode:prepublish": "npm run check && node esbuild.mjs --production",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.20.5",
+    "@types/vscode": "1.90.0",
+    "@vscode/l10n-dev": "^0.0.35",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.1.1",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
+    "playwright-core": "^1.65.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.1"
+  }
+}
